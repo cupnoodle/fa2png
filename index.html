@@ -19,6 +19,10 @@
       display: grid;
       grid-template-columns: auto auto;
     }
+
+    #canvas {
+      background-color: #CCC;
+    }
   </style>
 </head>
 <body>
@@ -36,7 +40,7 @@
     <br><br>
     <label>Icon Size</label>
     <br>
-    <input type="number" id="icon-size" value="100" max="999" pattern="\d*" onkeypress="return event.charCode >= 48 && event.charCode <= 57 && this.value.length < 3"/> px
+    <input type="number" id="icon-size" value="100" max="999" pattern="\d*" onkeypress="return event.charCode >= 48 && event.charCode <= 57 && this.value.length < 3" onkeydown="changeCanvasSize()"/> px
 
 
     <br><br><br><br><br>
@@ -48,7 +52,7 @@
     <button onclick="download()">Download</button>
     </div>
     <div class="right">
-      <div id="canvas" style="width: 100px; height: 100px; background-color: #CCC;"></div>
+      <div id="canvas" style="width: 100px; height: 100px;"></div>
     </div>
   </div>
 
@@ -56,6 +60,8 @@
     var generated_icon;
     var filename = 'icon';
     var canvas = document.getElementById('canvas');
+    var svgUrl;
+    var svgText;
 
     function download(){
       generated_icon.download('png', filename + '.png');
@@ -79,21 +85,44 @@
           });
       });
     
+
     function updateCanvas() {
       const dropdown = document.querySelector('#icon-name');
       const selectedUrl = dropdown.value;
+
+      if(selectedUrl.length == 0) {
+        return;
+      }
+
       const selectedText = dropdown.options[dropdown.selectedIndex].text;
 
+      const size = document.getElementById('icon-size').value;
+
+      if(size.length == ""){
+        return;
+      }
+      
       filename = selectedText;
       canvas.innerHTML = "";
 
       Pablo(canvas).load('svgs/' + selectedUrl, function(icon){  
-        icon.attr({width: '100px', height: '100px', fill: '#24B700'});
+        icon.attr({width: size + 'px', height: size + 'px', fill: '#24B700'});
         
         generated_icon = icon;
       });
     }
     
+    function changeCanvasSize() {
+      setTimeout(function() {
+        const size = document.getElementById('icon-size').value;
+        const c = document.getElementById('canvas');
+        c.style.width = size + 'px';
+        c.style.height = size + 'px';
+
+        updateCanvas();
+      }, 10);
+      
+    }
 
   </script>
   
