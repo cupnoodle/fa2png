@@ -1,0 +1,68 @@
+<html>
+<head>
+  <title>Font Awesome to PNG converter</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+  <script src="pablo.min.js"></script>
+  <script src="icons.js"></script>
+</head>
+<body>
+  Font Awesome 2 PNG WIP
+  <br><br>
+  <div style="max-width: 300px;">
+    <select id="icon-name" type="text" placeholder="flag-solid" onchange="updateCanvas()"></select>
+  </div>
+  <br><br><br><br><br>
+
+  <br><br><br><br><br>
+  <div id="canvas" style="width: 100px; height: 100px; background-color: #CCC;"></div>
+  <br><br>
+  <button onclick="download()">Download</button>
+  <script>
+    var generated_icon;
+    var filename = 'icon';
+    var canvas = document.getElementById('canvas');
+
+    function download(){
+      generated_icon.download('png', filename + '.png');
+    }
+
+    var singleFetch = new Choices('#icon-name', {
+        searchPlaceholderValue: 'Apple',
+        renderChoiceLimit: '5'
+      })
+      .setChoices(function() {
+        return fetch(
+          'icons.json'
+        )
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            return data.map(function(icon) {
+              return { label: icon.label, value: icon.id };
+            });
+          });
+      });
+    
+    function updateCanvas() {
+      const dropdown = document.querySelector('#icon-name');
+      const selectedUrl = dropdown.value;
+      const selectedText = dropdown.options[dropdown.selectedIndex].text;
+
+      filename = selectedText;
+      canvas.innerHTML = "";
+
+      Pablo(canvas).load('svgs/' + selectedUrl, function(icon){  
+        icon.attr({width: '100px', height: '100px', fill: '#24B700'});
+        
+        generated_icon = icon;
+      });
+    }
+    
+
+  </script>
+  
+</body>
+</html>
