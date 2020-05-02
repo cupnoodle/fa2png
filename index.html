@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
   <title>Font Awesome to PNG converter</title>
@@ -6,19 +7,51 @@
 
   <script src="pablo.min.js"></script>
   <script src="icons.js"></script>
+
+  <style>
+    .choices__inner {
+      min-height: 20px;
+    }
+
+    .container {
+      margin-left: 20px;
+      margin-right: 20px;
+      display: grid;
+      grid-template-columns: auto auto;
+    }
+  </style>
 </head>
 <body>
-  Font Awesome 2 PNG WIP
-  <br><br>
-  <div style="max-width: 300px;">
-    <select id="icon-name" type="text" placeholder="flag-solid" onchange="updateCanvas()"></select>
-  </div>
-  <br><br><br><br><br>
 
-  <br><br><br><br><br>
-  <div id="canvas" style="width: 100px; height: 100px; background-color: #CCC;"></div>
-  <br><br>
-  <button onclick="download()">Download</button>
+  <div class="container">
+    <div class="left">
+    Font Awesome 2 PNG WIP
+    <br><br>
+    <div style="max-width: 300px;">
+      <label>Icon Name</label>
+      <br>
+      <select id="icon-name" type="text" placeholder="flag-solid" onchange="updateCanvas()"></select>
+    </div>
+
+    <br><br>
+    <label>Icon Size</label>
+    <br>
+    <input type="number" id="icon-size" value="100" max="999" pattern="\d*" onkeypress="return event.charCode >= 48 && event.charCode <= 57 && this.value.length < 3"/> px
+
+
+    <br><br><br><br><br>
+
+    <br><br><br><br><br>
+    
+
+    <br><br>
+    <button onclick="download()">Download</button>
+    </div>
+    <div class="right">
+      <div id="canvas" style="width: 100px; height: 100px; background-color: #CCC;"></div>
+    </div>
+  </div>
+
   <script>
     var generated_icon;
     var filename = 'icon';
@@ -29,7 +62,7 @@
     }
 
     var singleFetch = new Choices('#icon-name', {
-        searchPlaceholderValue: 'Apple',
+        searchPlaceholderValue: 'icon name',
         renderChoiceLimit: '5'
       })
       .setChoices(function() {
