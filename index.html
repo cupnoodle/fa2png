@@ -20,8 +20,25 @@
       grid-template-columns: auto auto;
     }
 
+    .footer {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    .right {
+      margin-top: 3em;
+    }
+
+    @media only screen and (max-width: 500px) {
+      .container {
+        grid-template-columns: auto;
+      }
+    }
+
     #canvas {
-      background-color: #CCC;
+      background-image: linear-gradient(45deg, #C6C6C6 25%, transparent 25%), linear-gradient(-45deg, #C6C6C6 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #C6C6C6 75%), linear-gradient(-45deg, transparent 75%, #C6C6C6 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
     }
   </style>
 </head>
@@ -29,7 +46,7 @@
 
   <div class="container">
     <div class="left">
-    Font Awesome 2 PNG WIP
+    <h2>Font Awesome 2 PNG</h2>
     <br><br>
     <div style="max-width: 300px;">
       <label>Icon Name</label>
@@ -40,20 +57,23 @@
     <br><br>
     <label>Icon Size</label>
     <br>
-    <input type="number" id="icon-size" value="100" max="999" pattern="\d*" onkeypress="return event.charCode >= 48 && event.charCode <= 57 && this.value.length < 3" onkeydown="changeCanvasSize()"/> px
+    <input type="number" id="icon-size" value="100" max="999" pattern="\d*" onkeypress="return event.charCode >= 48 && event.charCode <= 57 && this.value.length < 3" onkeydown="changeCanvasSizeAndColor()"/> px
 
+    <br><br><br>
+    <label>Icon Color</label>
+    <br>
+    <input type="color" id="icon-color" name="icon-color" value="#000000" onchange="changeCanvasSizeAndColor()"/>
 
-    <br><br><br><br><br>
-
-    <br><br><br><br><br>
-    
-
-    <br><br>
+    <br><br><br>
     <button onclick="download()">Download</button>
     </div>
     <div class="right">
       <div id="canvas" style="width: 100px; height: 100px;"></div>
     </div>
+  </div>
+
+  <div class="footer">
+    <h2>FOOTER</h2>
   </div>
 
   <script>
@@ -97,6 +117,7 @@
       const selectedText = dropdown.options[dropdown.selectedIndex].text;
 
       const size = document.getElementById('icon-size').value;
+      const color = document.getElementById('icon-color').value;
 
       if(size.length == ""){
         return;
@@ -106,13 +127,13 @@
       canvas.innerHTML = "";
 
       Pablo(canvas).load('svgs/' + selectedUrl, function(icon){  
-        icon.attr({width: size + 'px', height: size + 'px', fill: '#24B700'});
+        icon.attr({width: size + 'px', height: size + 'px', fill: color});
         
         generated_icon = icon;
       });
     }
     
-    function changeCanvasSize() {
+    function changeCanvasSizeAndColor() {
       setTimeout(function() {
         const size = document.getElementById('icon-size').value;
         const c = document.getElementById('canvas');
@@ -121,7 +142,6 @@
 
         updateCanvas();
       }, 10);
-      
     }
 
   </script>
